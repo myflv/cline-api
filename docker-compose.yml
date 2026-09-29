@@ -1,0 +1,8 @@
+services:
+  cline-api:
+    image: ghcr.io/myflv/cline-api:latest
+    ports:
+      - "8787:8787"
+    volumes:
+      - ./config.json:/config.json:ro
+    restart: unless-stopped
