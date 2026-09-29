@@ -1,15 +1,17 @@
-name: release
+name: publish
 
+# Cuts an image and pushes it to ghcr. No GitHub release: the image tag is
+# the artifact.
 on:
   push:
     tags: ["v*"]
 
 permissions:
-  contents: write
+  contents: read
   packages: write
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,12 +21,6 @@ jobs:
           go-version-file: go.mod
 
       - run: go test ./...
-
-      - name: build binaries
-        run: |
-          for arch in amd64 arm64; do
-            CGO_ENABLED=0 GOOS=linux GOARCH=$arch go build -trimpath -ldflags "-s -w" -o cline-api-linux-$arch .
-          done
 
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
@@ -43,12 +39,3 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
             ghcr.io/${{ github.repository }}:latest
-
-      # Idempotent, so re-running a job that failed at the docker step works.
-      - name: create release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 ||
-            gh release create "$GITHUB_REF_NAME" --generate-notes
-          gh release upload "$GITHUB_REF_NAME" cline-api-linux-* --clobber

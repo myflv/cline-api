@@ -94,6 +94,8 @@ go build -o cline-api . && ./cline-api
 docker compose up -d          # 想固定版本就改 image: 为 ghcr.io/myflv/cline-api:v0.1.0
 ```
 
+打 tag（`v*`）会触发 CI：跑测试，然后构建 `linux/amd64` + `linux/arm64` 两个架构推到 `ghcr.io/myflv/cline-api`（tag 名 + `latest`）。**不发 GitHub Release**，镜像 tag 就是产物。
+
 调用者 `base_url` 指到 `http://<host>:8787/v1`。**Authorization 里填什么都可以** —— 代理会丢掉它，换成池子里的 key。
 
 ## 配置
