@@ -34,7 +34,7 @@ const (
 // nonStreamMessage is what a stream:false request gets. Cline's gateway only
 // answers in SSE, so the request is refused before any key is spent on a shape
 // the upstream cannot produce.
-const nonStreamMessage = "当前渠道不支持非流式请求，请设置 stream: true"
+const nonStreamMessage = "当前渠道不支持非流式请求"
 
 var hopHeaders = []string{
 	"Connection", "Proxy-Connection", "Keep-Alive", "Proxy-Authenticate",

@@ -11,7 +11,7 @@
 请求体里没写 `stream`（按 OpenAI 的默认值就是 false）或者显式写了 `stream: false`，代理直接返回 400：
 
 ```json
-{"error":{"code":400,"message":"当前渠道不支持非流式请求，请设置 stream: true","type":"proxy_error"}}
+{"error":{"code":400,"message":"当前渠道不支持非流式请求","type":"proxy_error"}}
 ```
 
 这一步在挑 key 之前做，**不会消耗任何额度** —— 与其让一个 key 去产出一个上游根本给不出的响应，不如当场说清楚。
